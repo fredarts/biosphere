@@ -1,0 +1,30 @@
+version: '3.8' # Use uma versão recente
+
+services:
+  # Serviço do Banco de Dados PostgreSQL
+  postgres_db:
+    image: postgres:17.5 # Use uma versão recente do Postgres
+    container_name: biosphere_postgres
+    environment:
+      POSTGRES_USER: biosphere_user # Nome de usuário do banco
+      POSTGRES_PASSWORD: 123456789 # !! Mude para uma senha forte !!
+      POSTGRES_DB: biosphere_dev # Nome do banco de dados inicial
+    ports:
+      - "5432:5432" # Mapeia a porta do container para a porta do seu host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persiste os dados do banco
+    restart: unless-stopped
+
+  # Serviço do Cache Redis
+  redis_cache:
+    image: redis:7 # Use uma versão recente do Redis
+    container_name: biosphere_redis
+    ports:
+      - "6379:6379" # Mapeia a porta do Redis
+    volumes:
+      - redis_data:/data # Persiste os dados do Redis (opcional para cache)
+    restart: unless-stopped
+
+volumes:
+  postgres_data: # Define o volume para persistir dados do Postgres
+  redis_data:    # Define o volume para persistir dados do Redis
